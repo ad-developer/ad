@@ -9,6 +9,8 @@ class FakeControl extends ADControl {};
 
 // class FakeModule extends ADModule {};
 
+// test commit
+
 /*
 function buildTestDom() {
   const con = document.createElement('div');
