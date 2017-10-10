@@ -1,0 +1,84 @@
+{
+  "name": "ad",
+  "version": "1.0.0",
+  "description": "ad control manager",
+  "scripts": {
+    "build": "mkdirp dist && webpack --progress --colors",
+    "build:min": "mkdirp dist && cross-env AD_ENV=production webpack -p --progress --colors",
+    "clean": "del-cli dist/**",
+    "dist": "npm run clean && npm run build && npm run build:min",
+    "dev": "npm run clean && cross-env AD_ENV=development webpack-dev-server --content-base demos --inline --hot --host 0.0.0.0",
+    "fix:css": "stylefmt -r packages/**/*.scss",
+    "fix:js": "eslint --fix packages test webpack.config.js karma.conf.js",
+    "fix": "npm-run-all --parallel fix:*",
+    "lint:js": "eslint packages test scripts webpack.config.js karma.conf.js",
+    "lint:css": "stylelint packages/**/*.scss",
+    "lint": "npm-run-all --parallel lint:*",
+    "test:watch": "karma start --auto-watch",
+    "test:unit": "karma start --single-run",
+    "pretest": "npm run lint",
+    "test": "npm run test:unit"
+  },
+  "author": "A.D.",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "autoprefixer": "^7.0.0",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-object-assign": "^6.8.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-traverse": "^6.24.1",
+    "cross-env": "^5.0.0",
+    "css-loader": "^0.28.0",
+    "del-cli": "^1.0.0",
+    "eslint": "^4.6.1",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "glob": "^7.1.1",
+    "node-sass": "^4.0.0",
+    "postcss-loader": "^2.0.3",
+    "sass-loader": "^6.0.4",
+    "scss-parser": "^1.0.0",
+    "style-loader": "^0.18.0",
+    "stylelint": "^8.1.1",
+    "stylelint-config-standard": "^17.0.0",
+    "stylelint-order": "^0.6.0",
+    "stylelint-scss": "^1.5.1",
+    "webpack": "^3.3.0",
+    "webpack-dev-server": "^2.4.3",
+    "stylefmt": "^6.0.0",
+    "npm-run-all": "^3.1.2",
+    "eslint-config-google": "^0.8.1",
+    "karma": "^1.1.1",
+    "karma-webpack": "^2.0.4",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-mocha": "^1.3.0",
+    "karma-coverage": "^1.1.0",
+    "karma-chrome-launcher": "^2.0.0",
+    "karma-sauce-launcher": "^1.0.0",
+    "istanbul-instrumenter-loader": "^2.0.0",
+    "mocha": "^3.5.3"
+  },
+  "babel": {
+    "presets": [
+      [
+        "es2015",
+        {
+          "modules": false
+        }
+      ]
+    ],
+    "plugins": [
+      "transform-object-assign"
+    ],
+    "env": {
+      "test": {
+        "presets": [
+          "es2015"
+        ]
+      }
+    }
+  },
+  "dependencies": {
+    "chai": "^4.1.2"
+  }
+}

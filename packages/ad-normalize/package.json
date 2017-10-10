@@ -1,0 +1,14 @@
+{
+  "name": "normalize",
+  "version": "0.0.1",
+  "description": "The normalize css",
+  "license": "Apache-2.0",
+  "keywords": [
+    "ad",
+    "normalize",
+    "ad-normalize"
+  ],
+  "dependencies": {
+    "base": "file:../ad-base"
+  }
+}

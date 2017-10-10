@@ -1,0 +1,16 @@
+{
+  "name": "uploader",
+  "version": "0.0.1",
+  "description": "ad file uploader component",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "keywords":[
+    "ad",
+    "uploader",
+    "ad-uploader"
+  ],
+  "dependencies": {
+    "package-one": "file:../package-one",
+    "package-two": "file:../package-two"
+  }
+}

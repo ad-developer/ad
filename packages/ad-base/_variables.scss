@@ -1,0 +1,29 @@
+
+// Options
+//
+$ad-enable-hover-media-query: false !default;
+
+// Colors
+$ad-brand-primary-color: #d32f2f !default;
+$ad-brand-secondary-color: #fff !default;
+$ad-black-color: #000 !default;
+$ad-white-color: #fff !default;
+
+// Fonts
+$ad-font-family-base: "Roboto", sans-serif !default;
+$ad-font-size-base: 1rem !default;
+$ad-font-weight-base: 400 !default;
+$ad-line-height-base: 1.5 !default;
+
+// Body color %87 ... 100 - 87 = %13
+$ad-body-color: lighten($ad-black-color, 13%) !default;
+$ad-body-bg: #fff !default;
+$ad-font-weight: 600 !default;
+$ad-link-color: $ad-brand-primary-color !default;
+$ad-link-decoration: none !default;
+$ad-link-hover-color: darken($ad-brand-primary-color, 15%) !default;
+$ad-link-hover-decoration: underline !default;
+$ad-table-cell-padding: .75rem !default;
+// Caption %54  ...
+$ad-text-muted: lighten($ad-black-color, 46%) !default;
+$ad-cursor-disabled: not-allowed !default;

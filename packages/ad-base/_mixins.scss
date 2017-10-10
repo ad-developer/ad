@@ -1,0 +1,78 @@
+@mixin ad-hover {
+  //  TODO: re-enable along with mq4-hover-shim
+  //  @if $enable-hover-media-query {
+  //    // See Media Queries Level 4: https://drafts.csswg.org/mediaqueries/#hover
+  //    // Currently shimmed by https://github.com/twbs/mq4-hover-shim
+  //    @media (hover: hover) {
+  //      &:hover { @content }
+  //    }
+  //  }
+  //  @else {
+  // scss-lint:disable Indentation
+  &:hover {
+    @content;
+  }
+  // scss-lint:enable Indentation
+  //  }
+}
+
+@mixin ad-hover-focus {
+  @if $ad-enable-hover-media-query {
+    @include ad-hover {
+      @content;
+    }
+
+    &:focus {
+      @content;
+    }
+  }
+
+  @else {
+    &:focus,
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin ad-plain-hover-focus {
+  @if $ad-enable-hover-media-query {
+    @include ad-hover {
+      @content;
+    }
+
+    &,
+    &:focus {
+      @content;
+    }
+  }
+
+  @else {
+    &,
+    &:focus,
+    &:hover {
+      @content;
+    }
+  }
+}
+
+@mixin ad-hover-focus-active {
+  @if $ad-enable-hover-media-query {
+    @include ad-hover {
+      @content;
+    }
+
+    &:focus,
+    &:active {
+      @content;
+    }
+  }
+
+  @else {
+    &:focus,
+    &:active,
+    &:hover {
+      @content;
+    }
+  }
+}
