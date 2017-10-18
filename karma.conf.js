@@ -43,7 +43,7 @@ const SL_LAUNCHERS = {
     version: '11',
     platform: 'Windows 8.1',
   },
-  // TODO(sgomes): Re-enable Edge and Safari after Sauce Labs problems are fixed.
+  // TODO: Re-enable Edge and Safari after Sauce Labs problems are fixed.
   // 'sl-edge': {
   //   base: 'SauceLabs',
   //   browserName: 'microsoftedge',
@@ -142,7 +142,7 @@ module.exports = function(config) {
   if (USING_TRAVISCI) {
     config.set({
       sauceLabs: {
-        testName: 'Material Components Web Unit Tests - CI',
+        testName: 'AD Framework Unit Tests - CI',
         tunnelIdentifier: process.env.TRAVIS_JOB_NUMBER,
         username: process.env.SAUCE_USERNAME,
         accessKey: process.env.SAUCE_ACCESS_KEY,
