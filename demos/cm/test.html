@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Control Manager</title>
+    <title>AD Framework Demos</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <script src="../assets/ad.normalize.css.js" charset="utf-8"></script>
+    <script src="../assets/demo-styles.css.js" charset="utf-8"></script>
+    <script src="../assets/ad.cm.js" charset="utf-8"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="" id="c1" ad-container ad-new-engine>
+        <div class="row" id="id_parent">
+          <div class="" id="f1" ad-subcontainer>
+            <div class="col">
+              <label for="firstName">First Name</label>
+              <input type="text" name="" value="" id="firstName">
+            </div>
+            <div class="col">
+              <label for="lastName">Lst Name</label>
+              <input type="text" name="" value="" id="lastName">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+        <div class="" id="f2">
+          <div class="col">
+            <label for="address">Address</label>
+            <input type="text" name="" value="" id="address">
+          </div>
+          <div class="col">
+            <label for="state">State</label>
+            <select class="" name="" id="state">
+              <option value="">Select a state</option>
+              <option value="AK">AK</option>
+              <option value="AZ">AZ</option>
+              <option value="CA">CA</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      </div>
+      <div class="row">
+        <pre id="res-json">
+        </pre>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button type="button" name="button" id="g-data">Get Data</button>
+        </div>
+        <div class="col">
+          <button type="button" name="button" id="g-json">Get Json</button>
+        </div>
+        <div class="col">
+          <button type="button" name="button" id="replaceSubcontainerBtn">Replace Subcontainer</button>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+    // JSON highliter
+    function syntaxHighlight(json) {
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    };
+
+    ad.cm.ADControlManager.build('c1');
+    document.getElementById('g-json')
+      .addEventListener('click', function(){
+        let c = ad.cm.ADControlManager.getContainer('c1');
+        let json = c.getJson();
+        json = JSON.stringify(json, undefined, 2);
+        json = syntaxHighlight(json);
+        document.getElementById('res-json').innerHTML = json;
+      });
+
+    let json = {
+      c: 'div',
+      id: 'f1',
+      'ad-new-subcontainer': '',
+      'ad-new-subcontainer-demo': '',
+      cs: [{
+        c:'div',
+        id: 'test-id',
+        cs:[{
+            "c": "label",
+            "for": "lastNameReplaces",
+            "id": "lastNameReplacesedLbl",
+            "ad_inner_text": "Last Name Replaced"
+          },
+          {
+            "c": "input",
+            "type": "text",
+            "id": "lastNameReplaces"
+          }
+        ]
+      }]
+    };
+    document.getElementById('replaceSubcontainerBtn')
+      .addEventListener('click', function(){
+          ad.cm.ADControlManager.build(json);
+      });
+
+      function testDom() {
+        const con = document.createElement('div');
+        con.innerHTML = `
+          <div id="con2">
+            This is test
+            <input type="text" id="name"/>
+          </div>
+          <input type="checkbox"/>
+        `;
+        return con;
+      };
+
+    function testJDONObject() {
+      return {
+        'c': 'div',
+        'id': 'ad2',
+        'cs': [
+          {
+            'c': 'div',
+            'id': 'con2',
+            'ad_inner_text': 'This is test',
+            'cs': [
+              {
+                'c': 'input',
+                'id': 'name',
+                'type': 'text',
+              },
+            ],
+          },
+          {
+            'c': 'input',
+            'id': 'ad3',
+            'type': 'checkbox',
+          },
+        ],
+      };
+    };
+
+    const dom = testDom();
+    const actualJSON = ad.cm.ADControlManager.convertDomToJson(dom);
+    const testJson = testJDONObject();
+
+  </script>
+</html>

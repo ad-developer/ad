@@ -101,7 +101,7 @@ const ADControlManager = {
         res += domNode.textContent;
       }
     }
-    return res;
+    return res.trim();
   },
 
   /**
@@ -204,7 +204,7 @@ const ADControlManager = {
 
     // TODO: Can be replace with the
     // document.querySelector(...);
-    const con = document.getElementById(id);
+    const con = ADControlManager.getDomElementById_(id);
     if (!tag) {
       tag = con.tagName.toLowerCase();
     }
@@ -279,23 +279,20 @@ const ADControlManager = {
   },
 
   /**
-   * Getter to get a datasource instance object.
+   * getDataSource get datasource class.
    *
    * @param  {string} name DataSorce name
-   * @return {object}      DataSource class instance object.
+   * @return {object}      DataSource class.
    */
   getDataSource(name) {
-    const Ds = this.dataSources_[name];
-    if (ds) {
-      return new Ds();
-    }
+    return this.dataSources_[name];
   },
 
   /**
-   * Getter to get a module instatnce object.
+   * getModule get module classs.
    *
    * @param  {string} name Module name.
-   * @return {object}      Module class instance object.
+   * @return {object}      Module class.
    */
   getModule(name) {
     return this.modules_[name];
@@ -305,7 +302,7 @@ const ADControlManager = {
    * Method to build container path. Used as a key to save/retrieve container
    * object from containers_ map.
    *
-   * @param  {object} parent    Parent Object
+   * @param  {ADControl} parent Parent Object
    * @param  {number} index     Position within parent collection of controls.
    * @return {string}           New calculated path.
    */
@@ -321,15 +318,15 @@ const ADControlManager = {
   /**
    * addContainer - Method to add a container to containers_ map;
    *
-   * @param  {string} id        Container id.
-   * @param  {object} container Container object.
-   * @param  {object} parent    Parent object.
-   * @param  {number} index     Position within parent collection of controls.
+   * @param  {string} id           Container id.
+   * @param  {ADControl} container Container object.
+   * @param  {ADControl} parent    Parent object.
+   * @param  {number} index        Position within parent collection of controls.
    */
   addContainer(id, container, parent, index) {
     let path = '';
     if (parent) {
-      path = this.getContainerPath_(parent, index);
+      path = ADControlManager.getContainerPath_(parent, index);
     }
     container.path = path;
     this.containers_[id] = container;
@@ -338,11 +335,11 @@ const ADControlManager = {
   /**
    * Getter to get container object from containers_ map;
    *
-   * @param  {string} id Container id.
-   * @return {object}    Container object.
+   * @param  {string} id    Container id.
+   * @return {ADControl}    Container object.
    */
   getContainer(id) {
-    return this.containers_[id];
+    return ADControlManager.containers_[id];
   },
 
   /**
@@ -442,6 +439,16 @@ const ADControlManager = {
       p: parent,
       i: i,
     };
+  },
+
+  /**
+   * getDomElementById_ - gets dom element by id
+   *
+   * @param  {string} id element id
+   * @return {Object}    dom element
+   */
+  getDomElementById_(id) {
+    return document.getElementById(id);
   },
 
 };

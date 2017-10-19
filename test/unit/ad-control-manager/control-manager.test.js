@@ -1,71 +1,134 @@
 import {assert} from 'chai';
-import {ADControlManager, ADControl/* , ADDataSource, ADModule*/} from '../../../packages/ad-control-manager';
+import bel from 'bel';
+
+import {ADControlManager, ADControl, ADGeneralControl,
+  ADDataSource, ADModule} from '../../../packages/ad-control-manager';
 
 suite('ADControlMnager');
 
 class FakeControl extends ADControl {};
 
-// class FaceDataSource extends ADDataSource {};
+class FakeGeneralControl extends ADGeneralControl {};
 
-// class FakeModule extends ADModule {};
+class FakeDataSource extends ADDataSource {};
 
-// test commit
+class FakeModule extends ADModule {};
 
-/*
-function buildTestDom() {
-  const con = document.createElement('div');
-  con.innerHtml = `
-  <div>
-    <div id="con2">
-      This is text
-      <input type="text" id="name"/>
-    <div>
-    <input type="checkbox"/>
-  </div>
-  `;
+function setTestContainer() {
+  let con = document.getElementById('ad-test');
+  if (!con) {
+    con = document.createElement('div');
+    con.setAttribute('id', 'ad-test');
+    document.body.appendChild(con);
+  } else {
+    // Remove all children
+    while (con.firstChild) {
+      con.removeChild(myNode.firstChild);
+    }
+  }
   return con;
 };
 
-function testJDONObject() {
+function getFixture() {
+  return bel`
+    <div>
+      <div id="con2">
+        This is test
+        <input type="text" id="name"/>
+      </div>
+      <input type="checkbox"/>
+    </div>
+  `;
+};
+
+function getContainerFixture() {
+  return bel`
+    <div id="con">
+      <input type="checkbox"/>
+    </div>
+  `;
+}
+
+function getJSON() {
   return {
-    'el': 'div',
+    'c': 'div',
     'id': 'ad2',
-    'els': [
+    'cs': [
       {
-        'el': 'div',
+        'c': 'div',
         'id': 'con2',
-        'els': [
+        'ad_inner_text': 'This is test',
+        'cs': [
           {
-            'el': 'input',
+            'c': 'input',
             'id': 'name',
             'type': 'text',
           },
         ],
       },
       {
-        'el': 'input',
+        'c': 'input',
         'id': 'ad3',
         'type': 'checkbox',
       },
     ],
   };
-}
-*/
-test('registerControl, getControl methods', ()=>{
+};
+
+test('registerControl registers a control with a specified key', ()=>{
   ADControlManager.registerControl('fake-control', FakeControl);
   const fakeControl = ADControlManager.getControl('fake-control');
   assert.isOk(fakeControl, FakeControl);
 });
 
-test('guid method', ()=>{
+test('getControl returns a control based on the key', ()=>{
+  const fakeControl = ADControlManager.getControl('fake-control');
+  assert.isOk(fakeControl, FakeControl);
+});
+
+test('registerDataSource registers a data source with a specified key', ()=>{
+  ADControlManager.registerDataSource('fake-datasource', FakeDataSource);
+  const fakeDataSource = ADControlManager.getDataSource('fake-datasource');
+  assert.isOk(fakeDataSource, FakeDataSource);
+});
+
+test('getDataSource returns data source based on the key', ()=>{
+  const fakeDataSource = ADControlManager.getDataSource('fake-datasource');
+  assert.isOk(fakeDataSource, FakeDataSource);
+});
+
+test('registerModule registers a module with a specified key', ()=>{
+  ADControlManager.registerModule('fake-module', FakeModule);
+  const fakeModule = ADControlManager.getModule('fake-module');
+  assert.isOk(fakeModule, FakeModule);
+});
+
+test('getModule returns module based on the key', ()=>{
+  const fakeModule = ADControlManager.getModule('fake-module');
+  assert.isOk(fakeModule, FakeModule);
+});
+
+test('guid method returns next guid id', ()=>{
   const guid = ADControlManager.guid();
   assert.equal(guid, 'ad1');
 });
 
-test('convertDomToJson method', ()=>{
-  // const dom = buildTestDom();
-  // const actualJSON = ADControlManager.convertDomToJson(dom);
-  // const json =testJDONObject();
-  // assert.deepEqual(actualJSON, json);
-  assert.equal(1, 1);
+test('convertDomToJson converts dom element to Json object', ()=>{
+  const dom = getFixture();
+  const actualJSON = ADControlManager.convertDomToJson(dom);
+  const testJSON = getJSON();
+  assert.deepEqual(actualJSON, testJSON);
+});
+
+test('addContainer  adds container to the container collection', ()=>{
+  // Without parent
+  const root = getContainerFixture();
+  const testContainer = setTestContainer();
+  testContainer.appendChild(root);
+  const fakeControlInstance = new FakeGeneralControl('con');
+  ADControlManager.addContainer('con', fakeControlInstance);
+  const savedContainerInstance = ADControlManager.getContainer('con');
+  assert.isOk(savedContainerInstance, fakeControlInstance);
+
+  // With parent
 });

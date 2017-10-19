@@ -20,7 +20,7 @@
 import ADControl from './control';
 import ADControlManager from './control-manager';
 
-class ADGeneralControl extends ADControl {
+export default class ADGeneralControl extends ADControl {
   renderDom() {
     const json = this.getJson();
     const ctrl = document.createElement(json.c);

@@ -98,7 +98,7 @@ export default class ADControl {
       // ... I want to be added to container collection
       $this.addContainer(id, $this, parent, index);
 
-      // ... and add all my chiilderen to myself
+      // ... and add all my children to myself
       for (; node = json.cs[i]; i++) {
         Cntrl = $this.getControl(node.c);
         Cntrl = new Cntrl(node, model, state, $this, i);
@@ -254,7 +254,7 @@ export default class ADControl {
     this.controls_.splice(index, 0, ctrl);
   }
   // Interfaces...
-  // TODO: can be implemented as adapter passed to the constructor?
+  // TODO: can be implemented as an adapter passed to the constructor?
   guid() {}
   addContainer(/* id, container, parent, index*/) {}
   convertDomToJson(/* domObj*/) {}
