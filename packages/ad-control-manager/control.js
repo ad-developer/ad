@@ -103,7 +103,7 @@ export default class ADControl {
         Cntrl = $this.getControl(node.c);
         Cntrl = new Cntrl(node, model, state, $this, i);
         $this.controls_.push(Cntrl);
-        $this.root_.append(Cntrl.getDom());
+        $this.root_.appendChild(Cntrl.getDom());
       }
     }
 
