@@ -69,6 +69,7 @@ module.exports = [{
   entry: {
     'base': path.resolve('./packages/ad-base/index.js'),
     'cm': path.resolve('./packages/ad-control-manager/index.js'),
+    'validator': path.resolve('./packages/ad-validator/index.js'),
   },
   output: {
     filename: 'ad.[name].' + (IS_PROD ? 'min.' : '') + 'js',

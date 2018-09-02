@@ -25,7 +25,7 @@ export default class ADComponent {
    * @return {!ADComponent}
    */
   static attachTo(root) {
-    // Subclasses which extend MDCBase should provide an attachTo() method that takes a root element and
+    // Subclasses which extend ADComponent should provide an attachTo() method that takes a root element and
     // returns an instantiated component with its root set to that element. Also note that in the cases of
     // subclasses, an explicit foundation class will not have to be passed in; it will simply be initialized
     // from getDefaultFoundation().
@@ -39,7 +39,7 @@ export default class ADComponent {
 
   /**
    * @param {!Element} root
-   * @return {!MDCComponent}
+   * @return {!ADComponent}
    */
   static getInstance(root) {
     return root.ad && root.ad[ADFoundation.strings.INSTANCE_KEY]

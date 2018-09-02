@@ -40,18 +40,18 @@ export default class ADControl {
 
     // Resolve Id and meta data.
     // Assumption: the very first element/collection must be supplied with an id.
-    if (meta.id) {
+    if (meta['ad-id']) {
       json = meta;
-      id = json.id;
+      id = json['ad-id'];
     } else if (typeof meta === 'string') {
       id = meta;
     }
     $this.id_ = id;
 
-    // Set Json, it runs only for the very first time in case of
-    // HTML markup. All consecutive children's runs are JSON based only.
+    // Set Json metadata. It runs only for the very first time if Html markup
+    // is passed. All consecutive descendant's runs are Json based.
     if (!json) {
-      el = document.getElementById(id);
+      el = document.querySelector(`[ad-id=${id}]`);
       json = $this.convertDomToJson(el);
     }
     $this.json_ = json;
@@ -106,21 +106,6 @@ export default class ADControl {
         $this.root_.appendChild(Cntrl.getDom());
       }
     }
-
-    // In case of replacement...
-    /* if(parent && !$this.getContainer($this.getId()) && json.cs){
-
-      // add to parent controls
-      cntrl = parent.getControls();
-      cntrl.splice(index, i, $this);
-
-      // add JSON branch
-      json = $this.locateObj(
-              $this.getRootContainer().getJson(),
-              parent.path);
-      json.cs.splice(index, 1, $this.json_);
-
-    }*/
   }
 
   /**

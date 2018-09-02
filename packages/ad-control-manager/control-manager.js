@@ -44,12 +44,6 @@ const ADControlManager = {
   containers_: {},
 
   /**
-   * Key/Value (map) object to keep states.
-   * @private
-   */
-  state_: {},
-
-  /**
    * Pre pad text to form global id.
    * @private
    */
@@ -88,17 +82,17 @@ const ADControlManager = {
   /**
    * getNodeText_ - description
    *
-   * @param  {type} domNode  DOM node.
+   * @param  {Elememt} domElement  DOM element.
    * @return {string}    returns the node's text content, disregarding all
    * childrens' text content.
    */
-  getNodeText_(domNode) {
+  getNodeText_(domElement) {
     let res = '';
     let i = 0;
-    const children = domNode.childNodes;
-    for (; domNode = children[i]; i++) {
-      if (domNode.nodeType === Node.TEXT_NODE && domNode.textContent.trim() !== '') {
-        res += domNode.textContent;
+    const children = domElement.childNodes;
+    for (; domElement = children[i]; i++) {
+      if (domElement.nodeType === Node.TEXT_NODE && domElement.textContent.trim() !== '') {
+        res += domElement.textContent;
       }
     }
     return res.trim();
@@ -110,17 +104,17 @@ const ADControlManager = {
    * nodes. This is a default implementation and is not controlled at this
    * moment... it can be added as an opt-out feature in the future
    * implementation.
-   * @param  {object} domObj Dom object.
+   * @param  {Elemnt} domElement DOM element.
    * @return {object}       Json object.
    */
-  convertDomToJson(domObj) {
+  convertDomToJson(domElement) {
     const obj = {};
     let i = 0;
     let el;
     let children;
     const arrObj = [];
-    const attr = domObj.attributes;
-    let tag = domObj.tagName.toLowerCase();
+    const attr = domElement.attributes;
+    let tag = domElement.tagName.toLowerCase();
     let id = false;
 
     obj.c = tag;
@@ -136,7 +130,7 @@ const ADControlManager = {
       tag = tag.trim();
       if (tag.length || el.name.startsWith('ad-')) {
         obj[el.name] = tag;
-        if (el.name === 'id') {
+        if (el.name === 'ad-id') {
           id = true;
         }
       }
@@ -144,19 +138,19 @@ const ADControlManager = {
     // Add id if missing...
     // TODO: This needs to be reviewed.
     if (!id) {
-      obj.id = this.guid();
+      obj['ad-id'] = this.guid();
     }
 
     // Check if element has an inner text
-    tag = ADControlManager.getNodeText_(domObj); // domObj.textContent.trim();
+    tag = ADControlManager.getNodeText_(domElement);
     if (tag.length) {
       obj.ad_inner_text = tag;
     }
 
     // Add children.
-    if (domObj.children.length) {
+    if (domElement.children.length) {
       i = 0;
-      children = domObj.children;
+      children = domElement.children;
       for (; el = children[i]; i++) {
         arrObj.push(ADControlManager.convertDomToJson(el));
       }
@@ -176,16 +170,28 @@ const ADControlManager = {
   /**
    * build - The main method of the framework. It applys
    *
-   * @param  {string|object} meta  Meta can be either container id
-   * or JSON object representing the content of the container. If container id
-   * is provided then the HTML markup will be used to build the content of the
-   * container...
-   * If JSON, then the following JSON format is used:
-   * { contId: "id", controls: [{tag: "name", attribute: "value", attribute: "value"}, ..., ]}
-   * @param  {object=} model Represents a model of the container
-   * controls.
-   * @param  {string=} state State of the control(s) it can be
-   * form, edit, or view.
+   * @param  {string|object} meta  meta can be either container id
+   * or Json object (descriptor) representing the content of the container.
+   *
+   * If a container id is provided then the HTML markup is used to build
+   * the content of the container...
+   * If Json object is provided ( the following Json format is used:
+   *                        { contId: "id",
+   *                          controls: [
+   *                                      {tag: "name",
+   *                                       attribute-one: "value",
+   *                                       attribute-two: "value",
+   *                                       ...
+ *                                         },
+   *                                       ...,
+   *                                       ]
+   *                         } )
+   * them the content is build base on the descriptor.
+   *
+   * @param  {object=} model Represents a model of the container controls.
+   *
+   * @param  {string=} state State of the control(s) it can be either edit
+   * (by defaut) or 'static' non editable.
    */
   build(meta, model, state) {
     let id;
@@ -194,29 +200,28 @@ const ADControlManager = {
     let po;
     let i;
 
-    // JSON
-    if (meta.id) {
-      id = meta.id;
+    // Resolve the meta data
+    if (meta['ad-id']) {
+      id = meta['ad-id'];
       tag = meta.c;
     } else {
       id = meta;
     }
 
-    // TODO: Can be replace with the
-    // document.querySelector(...);
-    const con = ADControlManager.getDomElementById_(id);
+    const con = document.querySelector(`[ad-id=${id}]`);
+
+    // Hide container. It can not be done properly on the very first run
+    // through the hide() method of the Control object. The Control object
+    // needs to be fully rendered before you can call the method which
+    // defeats the purpose of the action.
+    ADControlManager.hideContainer_(con);
+
     if (!tag) {
       tag = con.tagName.toLowerCase();
     }
-    // Hide container untill it's rendered in full.
-    // It is implemented through display css property.
-    // TODO: This can be done as a setting... to apply more robust mechanism using
-    // css transformation/animation properties.
-    con.style.display = 'none';
 
-
-    // Get a 'parent and the position within it
-    // in case of replacement
+    // Purge the container (if the container already exists)
+    // from the controls tree and get it's parent and it's position within it.
     po = this.purge_(id);
     // tag = null;
     if (po) {
@@ -240,11 +245,17 @@ const ADControlManager = {
       tag.cs.splice(i, 1, ControlObj.getJson());
     }
 
+    // Hide the newly built control before injecting it into the
+    // container.
     ControlObj.hide();
+
+    // Replace the container with the new DOM tree
     parent = con.parentElement;
-    // po is a new element
+    // Get the DOM tree
     po = ControlObj.getDom();
     parent.replaceChild(po, con);
+
+    // Show the control
     ControlObj.show();
   },
 
@@ -442,13 +453,12 @@ const ADControlManager = {
   },
 
   /**
-   * getDomElementById_ - gets dom element by id
+   * hideContainer_ - hides entry point container domElement
    *
-   * @param  {string} id element id
-   * @return {Object}    dom element
+   * @param  {Elememt} domElement toot element of the container
    */
-  getDomElementById_(id) {
-    return document.getElementById(id);
+  hideContainer_(domElement) {
+    domElement.style.display ='none';
   },
 
 };

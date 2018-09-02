@@ -10,7 +10,6 @@
     "ad-uploader"
   ],
   "dependencies": {
-    "package-one": "file:../package-one",
-    "package-two": "file:../package-two"
+    "package-one": "file:../ad-base"
   }
 }

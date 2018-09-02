@@ -1,0 +1,8 @@
+input wire
+based on input type
+  wire event blur, change etc
+  add to event validator rules (required goes first)
+
+what type
+get all attributes
+base on type wire to event and add all attributes' rules   
