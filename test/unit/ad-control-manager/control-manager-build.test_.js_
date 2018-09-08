@@ -1,6 +1,6 @@
 
-import {assert} from 'chai';
-import bel from 'bel';
+// import {assert} from 'chai';
+// import bel from 'bel';
 
 import {ADControlManager, ADControl, ADGeneralControl,
   ADDataSource, ADModule} from '../../../packages/ad-control-manager';
@@ -25,7 +25,7 @@ test('build builds the dom structure', ()=>{
   // It hides the root container and then sequentially shoes it after the dom
   // is built.
   // It replaces the root container with the new dom stracture.
-  // In case of injection it 
+  // In case of injection it
   resetADControlManager();
   const root = getContainerWithParentFixture();
   const testContainer = setTestContainer();

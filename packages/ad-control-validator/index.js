@@ -1,5 +1,5 @@
 import ADComponent from './node_modules/base/component';
-import ADValidatorItemFoundation from './foundation';
+import ADControlValidatorFoundation from './foundation';
 
 class ADControlValidator extends ADComponent {
   /**
@@ -43,7 +43,7 @@ class ADControlValidator extends ADComponent {
         });
       },
       getAllAtributes: () => {
-        const attrbites = [];
+        const attributes = [];
         let nodeName = '';
         for (let i = 0, attribute; attribute = this.root_.attributes; i++) {
           nodeName = attribute.nodeName;
@@ -62,12 +62,12 @@ class ADControlValidator extends ADComponent {
       getTitle: () => {
         let title = this.root_
           .getAttribute(ADControlValidatorFoundation.strings.TITLE);
-        if(!title) {
+        if (!title) {
           title = this.root_
             .getAttribute(ADControlValidatorFoundation.strings.ID);
         }
         return title;
-      }
+      },
     });
   }
 
@@ -91,3 +91,5 @@ class ADControlValidator extends ADComponent {
     return value;
   }
 };
+
+export {ADControlValidatorFoundation, ADControlValidator};
