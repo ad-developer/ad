@@ -15,19 +15,19 @@ const rules = {
   'ad-val-required': {
     hnd: (el, attrs, value) => {
       let res = false;
-      if(el.type && (el.type === 'checkbox' || el.type === 'radio')){
-       if(value) {
+      if (el.type && (el.type === 'checkbox' || el.type === 'radio')) {
+        if (value) {
           res = true;
-       } else {
-         const group = el.getAttribute(ADValidatorFoundation.strings.GROUP);
-         const grEls = document
-          .querySelectorAll(`[${ADValidatorFoundation.strings.GROUP}=${group}]`);
+        } else {
+          const group = el.getAttribute(ADValidatorFoundation.strings.GROUP);
+          const grEls = document
+            .querySelectorAll(`[${ADValidatorFoundation.strings.GROUP}=${group}]`);
           for (let i = 0, gEl; gEl = grEls[i]; i++) {
-            if(gEl.checked === true){
+            if (gEl.checked === true) {
               res = true;
             }
           }
-       }
+        }
       } else if (value.trim() !== '') {
         res = true;
       }

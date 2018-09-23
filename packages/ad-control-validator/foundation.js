@@ -75,8 +75,8 @@ class ADControlValidatorFoundation extends ADFoundation {
     if (this.isRequired_) {
       valid = this.validate_(ADControlValidatorFoundation.strings.REQUIRED, value);
     }
-    if(!typeof(value) === "boolean"){
-        value = value.trim() !== ''
+    if (!typeof(value) === 'boolean') {
+      value = value.trim() !== '';
     }
     // Check for the rest of validators
     if (valid && value) {

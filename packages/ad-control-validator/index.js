@@ -106,7 +106,7 @@ export default class ADControlValidator extends ADComponent {
       },
       isInGroup: () => {
         return this.root_.hasAttribute(ADControlValidatorFoundation.strings.GROUP);
-      }
+      },
     });
   }
 
@@ -122,7 +122,7 @@ export default class ADControlValidator extends ADComponent {
   getValue_() {
     let value;
     const root = this.root_;
-    if(root.type && (root.type === 'checkbox' || root.type === 'radio')) {
+    if (root.type && (root.type === 'checkbox' || root.type === 'radio')) {
       value = root.checked;
     } else {
       value = root.value;
