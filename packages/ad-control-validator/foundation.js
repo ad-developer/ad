@@ -2,33 +2,23 @@ import ADFoundation from './node_modules/base/foundation';
 
 const strings = {
   INSTANCE_KEY: 'ad-validator-item',
-  START_WITH: 'ad-v-',
-  REQUIRED: 'ad-val-required',
-  DATE: 'ad-v-date',
-  ZIP: 'ad-v-zip',
-  URL: 'ad-v-url',
-  DETAIL: 'ad-detail',
-  ID: 'ad-id',
-  TITLE: 'ad-title',
+  START_WITH: 'ad-val',
+  MESSAGE: 'ad-message',
+  MESSAGE_SHOW: 'ad-message-show',
   BLUR_EVENT: 'blur',
+  KEYUP_EVENT: 'keyup',
   CHANGE_EVENT: 'change',
-  THIS_FIELD: 'This field',
+  REQUIRED: 'ad-val-required',
+  ERROR_CLASS: 'ad-error',
+  LABEL: 'ad-label',
+  CONTROL_GROUP: 'ad-control-group',
+  GROUP: 'ad-group',
 };
 
 class ADControlValidatorFoundation extends ADFoundation {
-  /** @return enum {cssClasses} */
-  static get cssClasses() {
-    return cssClasses;
-  }
-
   /** @return enum {strings} */
   static get strings() {
     return strings;
-  }
-
-  /** @return enum {numbers} */
-  static get numbers() {
-    return numbers;
   }
 
   /** @return {!ADValidatorAdapter} */
@@ -37,44 +27,45 @@ class ADControlValidatorFoundation extends ADFoundation {
       isRequired: () => /* boolean */{},
       registerEvent: (/* type: string, handler: EventListener  */) => {},
       getAllAtributes: () => {},
-      getCustomDetail: () => /* string */ {},
-      getTitle: () => /* string */ {},
+      getMessage: () => /* string */ {},
       getRules: () => /* Object */ {},
+      setNotValidIndicator: (/* string */) => {},
+      removeNotValidIndicator: () => {},
+      isChangeCheckboxType: () => /* boolean */{},
+      getValue: () => /**/ {},
+      getElement: () => /* Element */{},
+      getLabel: () => /* string */{},
+      isInGroup: () => /* boolean */ {},
     });
-  }
-
-  // static addRule(ruleName, rule) {
-  //  rules[ruleName] = rule;
-  // }
-
-  static getRules() {
-    return this.adapter_.getRules();
   }
 
   constructor(adapter) {
     super(Object.assign(ADControlValidatorFoundation.defaultAdapter, adapter));
     this.attributes_ = [];
     this.required_ = false;
-    this.detail_ = '';
-    this.changeHanler_ = ({detail}) => {
-      const {value} = detail;
-      this.isValid(value);
-    };
-    this.blurHandler_ = ({detail}) => {
-      const {value} = detail;
+    this.detail_ = {};
+    this.label_ = 'Control';
+    this.validateHandler_ = () => {
+      const value = this.adapter_.getValue();
       this.isValid(value);
     };
   }
 
   init() {
     this.attributes_ = this.adapter_.getAllAtributes();
-    this.required_ = this.adapter_.isRequired();
-    if (this.adapter_.changeType()) {
+    this.isRequired_ = this.adapter_.isRequired();
+    this.element_ = this.adapter_.getElement();
+    if (this.adapter_.isChangeCheckboxType()) {
       // retgiter change event
-      this.adapter_.registerEvent(ADControlValidatorFoundation.strings.CHANGE_EVENT, this.changeHanler_);
+      this.adapter_.registerEvent(ADControlValidatorFoundation.strings.CHANGE_EVENT, this.validateHandler_);
     } else {
-      // register blur event
-      this.adapter_.registerEvent(ADControlValidatorFoundation.strings.BLUR_EVENT, this.blurHandler_);
+      // register keyup event
+      this.adapter_.registerEvent(ADControlValidatorFoundation.strings.KEYUP_EVENT, this.validateHandler_);
+      this.adapter_.registerEvent(ADControlValidatorFoundation.strings.BLUR_EVENT, this.validateHandler_);
+    }
+    const label = this.adapter_.getLabel();
+    if (label && label.trim() != '') {
+      this.label_ = label;
     }
   }
 
@@ -83,7 +74,12 @@ class ADControlValidatorFoundation extends ADFoundation {
     // First check if required
     if (this.isRequired_) {
       valid = this.validate_(ADControlValidatorFoundation.strings.REQUIRED, value);
-    } else {
+    }
+    if(!typeof(value) === "boolean"){
+        value = value.trim() !== ''
+    }
+    // Check for the rest of validators
+    if (valid && value) {
       for (let i = 0, attr; attr = this.attributes_[i]; i++) {
         valid = this.validate_(attr, value);
         if (!valid) {
@@ -91,41 +87,52 @@ class ADControlValidatorFoundation extends ADFoundation {
         }
       }
     }
+    if (!valid) {
+      this.adapter_.setNotValidIndicator(this.detail_);
+    } else {
+      this.adapter_.removeNotValidIndicator();
+    }
     return valid;
   }
 
+  getDetail() {
+    return this.detail_;
+  }
+
   validate_(attr, value) {
-    const valid = true;
-    const {validated, detail} = this.resolveAttribute_(attr, value);
+    let valid = true;
+    let {validated, detail} = this.resolveAttribute_(attr, value);
+    this.detail_ = {};
     if (!validated) {
       // Second use for custom details
-      validated = this.adapter_.getCustomDetail();
+      validated = this.adapter_.getMessage();
       if (validated) {
         detail = validated;
-      } else {
-        this.detail_ = `${this.adapter_.getTitle()} ${detail}`;
       }
+      this.detail_ = {
+        label: this.label_,
+        message: detail,
+        isGroup: this.adapter_.isInGroup(),
+      };
       valid = false;
     }
     return valid;
   }
 
   resolveAttribute_(attr, value) {
-    const rules = this.getRules();
+    const rules = this.adapter_.getRules();
     const rule = rules[attr];
-    let result = true;
+    let validated = true;
+    let detail = '';
     if (rule) {
       if (rule.hnd) {
-        result = rule.hnd(this.root_, this.attributes_, value);
+        validated = rule.hnd(this.element_, this.attributes_, value);
       } else {
-        result = rule.pattern.exec(value);
+        validated = rule.pattern.exec(value);
       }
+      detail = rule.detail;
     }
-    return result;
-  }
-
-  getDetail() {
-    return this.detail_;
+    return {validated, detail};
   }
 }
 

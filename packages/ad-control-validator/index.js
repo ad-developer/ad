@@ -1,7 +1,7 @@
 import ADComponent from './node_modules/base/component';
 import ADControlValidatorFoundation from './foundation';
 
-class ADControlValidator extends ADComponent {
+export default class ADControlValidator extends ADComponent {
   /**
    * @param {!Element} root
    * @return {!ADComponent}
@@ -24,12 +24,8 @@ class ADControlValidator extends ADComponent {
       ? root.ad[ADValidatorItemFoundation.strings.INSTANCE_KEY] : null;
   }
 
-  static addRule(rule) {
-    ADControlValidatorFoundation.addRule(rule);
-  }
-
-  initialize() {
-
+  initialize(rules) {
+    this.rules_ = rules;
   }
 
   getDefaultFoundation() {
@@ -38,36 +34,79 @@ class ADControlValidator extends ADComponent {
         return this.root_.hasAttribute(ADControlValidatorFoundation.strings.REQUIRED);
       },
       registerEvent: (type, handler) => {
-        this.root_.addEventListener(type, (e) => {
+        this.listen(type, (e) => {
           handler(e.value);
         });
       },
       getAllAtributes: () => {
         const attributes = [];
-        let nodeName = '';
-        for (let i = 0, attribute; attribute = this.root_.attributes; i++) {
-          nodeName = attribute.nodeName;
-          if (nodeName.startWith(ADControlValidatorFoundation.strings.START_WITH)) {
-            attributes.push(nodeName);
+        let name = '';
+        for (let i = 0, attribute; attribute = this.root_.attributes[i]; i++) {
+          name = attribute.name;
+          if (name.startsWith(ADControlValidatorFoundation.strings.START_WITH)) {
+            attributes.push(name);
           }
         }
         return attributes;
       },
-      getCustomDetail: () => {
+      getMessage: () => {
         const detail
           = this.root_
-            .getAttribute(ADControlValidatorFoundation.strings.DETAIL);
+            .getAttribute(ADControlValidatorFoundation.strings.MESSAGE);
         return detail;
       },
-      getTitle: () => {
-        let title = this.root_
-          .getAttribute(ADControlValidatorFoundation.strings.TITLE);
-        if (!title) {
-          title = this.root_
-            .getAttribute(ADControlValidatorFoundation.strings.ID);
-        }
-        return title;
+      getRules: () => {
+        return this.rules_;
       },
+      setNotValidIndicator: (details) => {
+        // Set the validator indicator
+        const gr = this.root_.closest(`[${ADControlValidatorFoundation.strings.CONTROL_GROUP}]`);
+        if (gr) {
+          gr.classList.add(ADControlValidatorFoundation.strings.ERROR_CLASS);
+        }
+        const det = gr.querySelector(`[${ADControlValidatorFoundation.strings.MESSAGE_SHOW}]`);
+        if (det) {
+          det.innerHTML = details.message;
+          det.style.display = 'block';
+        }
+      },
+      removeNotValidIndicator: () => {
+        // Remove the validator indicator
+        const gr = this.root_.closest(`[${ADControlValidatorFoundation.strings.CONTROL_GROUP}]`);
+        if (gr) {
+          gr.classList.remove(ADControlValidatorFoundation.strings.ERROR_CLASS);
+        }
+        const det = gr.querySelector(`[${ADControlValidatorFoundation.strings.MESSAGE_SHOW}]`);
+        if (det) {
+          det.innerHTML = '';
+          det.style.display = 'none';
+        }
+      },
+      isChangeCheckboxType: () => {
+        const root = this.root_;
+        const res =
+          root.nodeName === 'SELECT' ||
+          root.type && (root.type == 'checkbox' || root.type == 'radio');
+        return res;
+      },
+      getValue: () => {
+        return this.getValue_();
+      },
+      getElement: () => {
+        return this.root_;
+      },
+      getLabel: () => {
+        let res = '';
+        const gr = this.root_.closest(`[${ADControlValidatorFoundation.strings.CONTROL_GROUP}]`);
+        const el = gr.querySelector(`[${ADControlValidatorFoundation.strings.LABEL}]`);
+        if (el) {
+          res = el.getAttribute(ADControlValidatorFoundation.strings.LABEL);
+        }
+        return res;
+      },
+      isInGroup: () => {
+        return this.root_.hasAttribute(ADControlValidatorFoundation.strings.GROUP);
+      }
     });
   }
 
@@ -83,8 +122,8 @@ class ADControlValidator extends ADComponent {
   getValue_() {
     let value;
     const root = this.root_;
-    if (root.tagName === 'SELECT') {
-      value = root.options[root.selectedIndex].value;
+    if(root.type && (root.type === 'checkbox' || root.type === 'radio')) {
+      value = root.checked;
     } else {
       value = root.value;
     }

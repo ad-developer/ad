@@ -1,16 +1,13 @@
 import ADFoundation from './node_modules/base/foundation';
 
-
-const cssClasses = {
-
-};
+const cssClasses = {};
 
 const strings = {
   INSTANCE_KEY: 'ad-validator',
   VALIDATE: 'ad-val',
-};
-
-const numbers = {
+  MATCH: 'ad-val-match',
+  ID: 'ad-id',
+  GROUP: 'ad-group',
 
 };
 
@@ -18,36 +15,66 @@ const rules = {
   'ad-val-required': {
     hnd: (el, attrs, value) => {
       let res = false;
-      if (value && value.trim() !== '') {
+      if(el.type && (el.type === 'checkbox' || el.type === 'radio')){
+       if(value) {
+          res = true;
+       } else {
+         const group = el.getAttribute(ADValidatorFoundation.strings.GROUP);
+         const grEls = document
+          .querySelectorAll(`[${ADValidatorFoundation.strings.GROUP}=${group}]`);
+          for (let i = 0, gEl; gEl = grEls[i]; i++) {
+            if(gEl.checked === true){
+              res = true;
+            }
+          }
+       }
+      } else if (value.trim() !== '') {
         res = true;
       }
       return res;
     },
-    detail: 'is required',
+    detail: 'Required',
   },
   'ad-val-phone': {
     pattern: /^\(?\d{3}\)?[\s-]?\d{3}[\s-]?\d{4}$/,
-    detail: 'is not valid phone',
+    detail: 'Phone number is not valid',
   },
   'ad-val-email': {
     pattern: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-    detail: 'is not valid email',
+    detail: 'Email is not valid',
   },
   'ad-val-url': {
     pattern: /^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/,
-    detail: 'is not valid URL',
+    detail: 'URL is not valid',
   },
   'ad-val-zip': {
     pattern: /^\d{5}(-\d{4})?$/,
-    detail: 'is not valid ZIP code',
+    detail: 'ZIP code is not valid',
   },
   'ad-val-decimal': {
     pattern: /^[0-9]+(\.[0-9][0-9]?)?$/,
-    detail: 'is not valid decimal number',
+    detail: 'Decimal number is not valid',
   },
   'ad-val-number': {
     pattern: /^[0-9]*$/,
-    detail: 'is not valid number',
+    detail: 'Number is not valid',
+  },
+  'ad-val-match': {
+    hnd: (el, attrs, value) => {
+      let res = false;
+      const id = el.getAttribute(ADValidatorFoundation.strings.MATCH);
+      const mEl = document.querySelector(`[${ADValidatorFoundation.strings.ID}=${id}]`);
+      if (mEl) {
+        const mValue = mEl.value.trim();
+        value = value.trim();
+
+        if (value && (value === '' || value === mValue)) {
+          res =true;
+        }
+      }
+      return res;
+    },
+    detail: 'Does not match',
   },
 };
 
@@ -62,11 +89,6 @@ class ADValidatorFoundation extends ADFoundation {
     return strings;
   }
 
-  /** @return enum {numbers} */
-  static get numbers() {
-    return numbers;
-  }
-
   static get rules() {
     return rules;
   }
@@ -74,6 +96,7 @@ class ADValidatorFoundation extends ADFoundation {
   static addRule(rule, name) {
     rules[name] = rule;
   }
+
   /** @return {!ADValidatorAdapter} */
   static get defaultAdapter() {
     return /** @type {!ADValidatorAdapter} */ ({
@@ -82,28 +105,21 @@ class ADValidatorFoundation extends ADFoundation {
       registerValidators: () => {},
       isValid: () => /* boolean */ {},
       getDetails: () => {},
-      // Adaptor body
     });
   }
 
   constructor(adapter) {
-    super(Object.assign(ADValidatorAdapter.defaultAdapter, adapter));
+    super(Object.assign(ADValidatorFoundation.defaultAdapter, adapter));
   }
 
-  init() {
-    // Disable the default client validation
-    if (this.adapter_.isRootForm()) {
-      this.adapter_.disableDefaultValidation();
-    }
-    this.adapter_.registerValidators();
-  }
+  init() {}
 
   isValid() {
     return this.adapter_.isValid();
   }
 
   getDetails() {
-    return adapter_.getDetails();
+    return this.adapter_.getDetails();
   }
 };
 

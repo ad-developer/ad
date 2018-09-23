@@ -4,6 +4,10 @@ body {
 h1 {
   font-weight: 300;
 }
+input,
+select {
+  outline: none;
+}
 .ad-header {
   display: flex;
   position: fixed;
@@ -15,6 +19,7 @@ h1 {
   color: #fff;
   font-size: 24px;
   font-weight: 100;
+  z-index: 1;
 }
 .ad-header .ad-item {
   display: inline-block;
@@ -145,3 +150,61 @@ pre {
   color: magenta; }
 .key {
   color: red; }
+
+/* Forms */
+.ad-control-group {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 48px;
+  vertical-align: top;
+}
+.ad-control-group .ad-label {
+  display: inline-block;
+  width: 30%;
+  text-align: right;
+  padding-right: 24px;
+}
+.ad-control-group .ad-controls {
+  display: inline-block;
+  width: 60%;
+}
+.ad-controls input,
+.ad-controls select {
+  width: 100%;
+}
+.ad-controls input[type=checkbox],
+.ad-controls input[type=radio] {
+  display: inline-block;
+  position: relative;
+  width: auto;
+  margin-right: 8px;
+  vertical-align: top;
+  top: 4px;
+}
+.ad-controls label {
+  margin-right: 4px;
+}
+.ad-control-group .ad-details {
+  display: block;
+  position: relative;
+  font-size: 12px;
+  text-align: right;
+  height: 12px;
+  line-height: 12px;
+}
+.ad-control-group .ad-button {
+  position: relative;
+  top: 10px;
+  float: right;
+  margin-right: 24px;
+}
+.ad-error .ad-label,
+.ad-error .ad-details,
+.ad-error label {
+  color: #f00;
+}
+.ad-error input,
+.ad-error select {
+  border-color: #f00;
+}
