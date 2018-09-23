@@ -14,6 +14,14 @@ class FakeDataSource extends ADDataSource {};
 
 class FakeModule extends ADModule {};
 
+function resetADControlManager() {
+  // ADControlManager.controls_ = {};
+  ADControlManager.dataSources_ = {};
+  ADControlManager.modules_ = {};
+  ADControlManager.containers_ = {};
+  ADControlManager.gid_ = 1;
+}
+
 function setTestContainer() {
   let con = document.getElementById('ad-test');
   if (!con) {
@@ -23,7 +31,7 @@ function setTestContainer() {
   } else {
     // Remove all children
     while (con.firstChild) {
-      con.removeChild(myNode.firstChild);
+      con.removeChild(con.firstChild);
     }
   }
   return con;
@@ -32,9 +40,9 @@ function setTestContainer() {
 function getFixture() {
   return bel`
     <div>
-      <div id="con2">
+      <div ad-id="con2">
         This is test
-        <input type="text" id="name"/>
+        <input type="text" ad-id="name"/>
       </div>
       <input type="checkbox"/>
     </div>
@@ -43,32 +51,43 @@ function getFixture() {
 
 function getContainerFixture() {
   return bel`
-    <div id="con">
+    <div ad-id="con">
       <input type="checkbox"/>
     </div>
   `;
-}
+};
+
+function getContainerWithParentFixture() {
+  return bel`
+    <div ad-id="parent">
+      <input type="checkbox"/>
+      <div ad-id="child">
+        <input type="text"/>
+      </div>
+    </div>
+  `;
+};
 
 function getJSON() {
   return {
     'c': 'div',
-    'id': 'ad2',
+    'ad-id': 'ad1',
     'cs': [
       {
         'c': 'div',
-        'id': 'con2',
+        'ad-id': 'con2',
         'ad_inner_text': 'This is test',
         'cs': [
           {
             'c': 'input',
-            'id': 'name',
+            'ad-id': 'name',
             'type': 'text',
           },
         ],
       },
       {
         'c': 'input',
-        'id': 'ad3',
+        'ad-id': 'ad2',
         'type': 'checkbox',
       },
     ],
@@ -114,14 +133,15 @@ test('guid method returns next guid id', ()=>{
 });
 
 test('convertDomToJson converts dom element to Json object', ()=>{
+  resetADControlManager();
   const dom = getFixture();
   const actualJSON = ADControlManager.convertDomToJson(dom);
   const testJSON = getJSON();
   assert.deepEqual(actualJSON, testJSON);
 });
 
-test('addContainer  adds container to the container collection', ()=>{
-  // Without parent
+test('addContainer (without parent) adds container to the container collection', ()=>{
+  resetADControlManager();
   const root = getContainerFixture();
   const testContainer = setTestContainer();
   testContainer.appendChild(root);
@@ -129,6 +149,21 @@ test('addContainer  adds container to the container collection', ()=>{
   ADControlManager.addContainer('con', fakeControlInstance);
   const savedContainerInstance = ADControlManager.getContainer('con');
   assert.isOk(savedContainerInstance, fakeControlInstance);
+});
 
-  // With parent
+test('addContainer (with parent) adds container to the container collection', ()=>{
+  resetADControlManager();
+  const root = getContainerWithParentFixture();
+  const testContainer = setTestContainer();
+  testContainer.appendChild(root);
+
+  const fakeParentInstance = new FakeGeneralControl('parent');
+  const fakeChildInstance = fakeParentInstance.getControl('child');
+  ADControlManager.addContainer('parent', fakeChildInstance);
+
+  const child = ADControlManager.getContainer('child');
+  const childParent = child.getParent();
+
+  assert.isOk(fakeChildInstance, child);
+  assert.isOk(fakeParentInstance, childParent);
 });

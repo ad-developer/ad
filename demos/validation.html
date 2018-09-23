@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<!--
+  Copyright 2017 A.D. All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>AD Framework Demos</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+    <script src="assets/ad.normalize.css.js" charset="utf-8"></script>
+    <script src="assets/demo-styles.css.js" charset="utf-8"></script>
+    <script src="assets/ad.cm.js" charset="utf-8"></script>
+      <script src="assets/ad.validator.js" charset="utf-8"></script>
+  </head>
+  <body style="background-color: #fff">
+    <div class="ad-header">
+      <div class="ad-container">
+        <div class="ad-item">
+          <a href="/">{AD} Javascript Framework<a/>
+        </div>
+        <div class="ad-item ad-menu-item" style="float:right">
+          <a href="/introduction.html">Introduction<a/>
+        </div>
+      </div>
+    </div>
+    <div class="ad-container" style="margin-top: 80px;">
+          <form class="" action="index.html" method="post" ad-form>
+              <div class="ad-control-group" ad-control-group>
+              <label for="" class="ad-label" ad-label="Name">Name</label>
+              <div class="ad-controls">
+                  <input type="text" ad-val ad-val-required >
+              </div>
+              <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Address">Address</label>
+            <div class="ad-controls">
+                <input type="text" ad-val ad-val-required >
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+          <label for="" class="ad-label">State</label>
+          <div class="ad-controls">
+            <select class="" name="" ad-val ad-val-required ad-title="State">
+              <option value=""></option>
+              <option value="AK">AK</option>
+              <option value="AZ">AZ</option>
+            </select>
+          </div>
+          <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Phone">Phone</label>
+            <div class="ad-controls">
+                <input type="text" ad-val ad-val-required ad-val-phone>
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Email">Email</label>
+            <div class="ad-controls">
+                <input type="text" ad-val ad-val-required ad-val-email>
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="URL">URL</label>
+            <div class="ad-controls">
+                <input type="text" ad-val ad-val-required ad-val-url>
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Number of Days">Number of Days</label>
+            <div class="ad-controls">
+                <input type="text" ad-val ad-val-required ad-val-number>
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Amount">Amount</label>
+            <div class="ad-controls">
+                <input type="text" ad-val ad-val-required ad-val-decimal>
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Password">Password</label>
+            <div class="ad-controls">
+                <input type="password" ad-id="password">
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Confirm Password">Confirm Password</label>
+            <div class="ad-controls">
+                <input type="password" ad-val ad-val-match="password" ad-detail="Password does not match">
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="How to Contact You">How to Contact You</label>
+            <div class="ad-controls">
+                <label for="">By Mail</label>
+                <input type="checkbox" ad-val ad-val-required ad-group="test">
+                <label for="">By Phone</label>
+                <input type="checkbox" ad-val ad-val-required ad-group="test">
+                <label for="">Via Email</label>
+                <input type="checkbox" ad-val ad-val-required ad-group="test">
+                <label for="">Via Regular Mail</label>
+                <input type="checkbox" ad-val ad-val-required ad-group="test">
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Agree with policy">Agree with policy</label>
+            <div class="ad-controls">
+                <input type="checkbox" ad-val ad-val-required>
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Multi Radio">Multi Radio</label>
+            <div class="ad-controls">
+                <label for="">Option One</label>
+                <input type="radio" ad-val ad-val-required ad-group="test-radio" name="test-radio">
+                <label for="">Option Two</label>
+                <input type="radio" ad-val ad-val-required ad-group="test-radio" name="test-radio">
+                <label for="">Option Three</label>
+                <input type="radio" ad-val ad-val-required ad-group="test-radio" name="test-radio">
+                <label for="">Option Four</label>
+                <input type="radio" ad-val ad-val-required ad-group="test-radio" name="test-radio">
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <div class="ad-control-group" ad-control-group>
+            <label for="" class="ad-label" ad-label="Single Radio">Single Radio</label>
+            <div class="ad-controls">
+                <input type="radio" ad-val ad-val-required>
+            </div>
+            <div class="ad-details" ad-message-show style="display: none"></div>
+        </div>
+        <!-- Submit button -->
+        <div class="ad-control-group">
+          <button type="button" name="button" class="ad-button" ad-submit>Submit</button>
+        </div>
+
+      </form>
+    </div>
+    <script type="text/javascript">
+
+      let validator = ad.validator.ADValidator;
+      let form = document.querySelector('[ad-form]');
+      validator.attachTo(form);
+
+      let btn = document.querySelector('[ad-submit]');
+      btn.addEventListener('click', () => {
+          let validator = ad.validator.ADValidator.getInstance(form);
+          if(validator.isValid()){
+            alert('Good news...');
+          } else {
+            let details = validator.getDetails();
+            let res = '';
+            for (var i = 0; i < details.length; i++) {
+              let detail = details[i];
+              res += `${detail.label} ${detail.message} \n`;
+            }
+            alert(res);
+          }
+      });
+    </script>
+  </body>
+</html>

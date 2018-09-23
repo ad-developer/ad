@@ -1,0 +1,17 @@
+{
+  "name": "control-validator",
+  "version": "0.0.1",
+  "description": "ad control validator component",
+  "main": "index.js",
+  "license": "Apache-2.0",
+  "keywords": [
+    "ad",
+    "validator",
+    "control-validator",
+    "ad-validator",
+    "ad-control-validator"
+  ],
+  "dependencies": {
+    "base": "file:../ad-base"
+  }
+}
