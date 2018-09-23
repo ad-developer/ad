@@ -2,7 +2,7 @@ import ADComponent from './node_modules/base/component';
 
 import ADValidatorFoundation from './foundation';
 import ADControlValidator from './node_modules/control-validator';
- 
+
 class ADValidator extends ADComponent {
   /**
    * @param {!Element} root
@@ -52,12 +52,13 @@ class ADValidator extends ADComponent {
       getDetails: () => {
         const details = [];
         for (let i = 0, control, detail; control = this.controls_[i]; i++) {
-          if(control)
-          detail = control.getDetail();
+          if (control) {
+            detail = control.getDetail();
+          }
           if (detail.message) {
             // Check if elemet is a part of the group and the
             // message has already been added to the details list
-            if(detail.isGroup && !this.isInDerailsList_(details, detail)
+            if (detail.isGroup && !this.isInDerailsList_(details, detail)
               || !detail.isGroup) {
               details.push(detail);
             }
@@ -96,13 +97,12 @@ class ADValidator extends ADComponent {
   isInDerailsList_(list, detail) {
     let res = false;
     for (let i = 0, el; el = list[i]; i++) {
-      if(el.label === detail.label){
+      if (el.label === detail.label) {
         res = true;
       }
     }
     return res;
   }
-
 };
 
 export {ADValidatorFoundation, ADValidator};
