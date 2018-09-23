@@ -2,6 +2,7 @@ fieldLabel = ['Name', 'Address', 'Phone', 'Email', 'URL', 'Number of Days', 'Amo
 filedIds = ['name', 'address', 'phone', 'email', 'url', 'numberOfDays', 'amount']
 val = ['','','phone', 'email', 'url', 'number','decimal']
 
+
 for i, id in enumerate(filedIds):
     label = fieldLabel[i]
     v = val[i]

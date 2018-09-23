@@ -9,6 +9,6 @@
     "ad-normalize"
   ],
   "dependencies": {
-    "base": "file:../ad-base"
+    "base": "../ad-base"
   }
 }

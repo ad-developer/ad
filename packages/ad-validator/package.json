@@ -10,7 +10,7 @@
     "ad-validator"
   ],
   "dependencies": {
-    "base": "file:../ad-base",
-    "control-validator": "file:../ad-control-validator"
+    "base": "../ad-base",
+    "control-validator": "../ad-control-validator"
   }
 }

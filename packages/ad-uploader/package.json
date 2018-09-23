@@ -4,12 +4,12 @@
   "description": "ad file uploader component",
   "main": "index.js",
   "license": "Apache-2.0",
-  "keywords":[
+  "keywords": [
     "ad",
     "uploader",
     "ad-uploader"
   ],
   "dependencies": {
-    "base": "file:../ad-base"
+    "base": "../ad-base"
   }
 }
